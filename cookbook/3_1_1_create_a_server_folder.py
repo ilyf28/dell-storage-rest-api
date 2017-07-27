@@ -60,11 +60,38 @@ for i in range(len(stdout)):
 
 
 
-# create Storage Center server folder object managed by DSM / SC 9
+# declare and define the payload variable
+payload = {}
+
+# define the REST API call
+REST = '/StorageCenter/StorageCenter/%s/ServerFolderList' % (scList['Storage Center 75618']['instanceId'])
+
+# build the complete REST API URL
+completeURL = '%s%s' % (baseURL, REST if REST[0] != '/' else REST[1:])
+
+# execute REST API call via the HTTP GET method
+json_data = connection.get(completeURL, headers=header, verify=verify_cert)
+stdout = json.loads(json_data.text)
+srvFolderList = {}
+print "Name\t\t\t\t\tinstanceId\t\tParent"
+for i in range(len(stdout)):
+        if stdout[i]['name'] == "Servers":
+                continue
+        print "%s\t\t\t\t%s\t\t%s" % (stdout[i]['name'], stdout[i]['instanceId'], stdout[i]['parent']['instanceName'])
+        srvFolderList[stdout[i]['name']] = {}
+        srvFolderList[stdout[i]['name']]['instanceId'] = stdout[i]['instanceId']
+        srvFolderList[stdout[i]['name']]['parent'] = stdout[i]['parent']['instanceName']
+
+
+
+
+
+# create Storage Center server folder object managed by DSM / Storage Center 75618
 payload = {}
 # user-defined string / folder name
 payload['Name'] = 'RestTest'
 payload['StorageCenter'] = scList['Storage Center 75618']['instanceId']
+# Storage Center instanceId + ".0" represents (/) the root level folder
 payload['Parent'] = scList['Storage Center 75618']['instanceId'] + ".0"
 # user-defined string / notes
 payload['Notes'] = 'Created via REST API'
@@ -75,29 +102,6 @@ stdout = json.loads(json_data.text)
 print stdout
 
 #srvFolderList = {} created earlier in Section 2.3.4 #2.3.5
-srvFolderList = {}
 srvFolderList[stdout['name']] = {}
 srvFolderList[stdout['name']]['instanceId'] = stdout['instanceId']
 srvFolderList[stdout['name']]['parent'] = 'Servers'
-
-## declare and define the payload variable
-#payload = {}
-#
-## define the REST API call
-#REST = '/StorageCenter/StorageCenter/%s/ServerFolderList' % (scList['Storage Center 75618']['instanceId'])
-#
-## build the complete REST API URL
-#completeURL = '%s%s' % (baseURL, REST if REST[0] != '/' else REST[1:])
-#
-## execute REST API call via the HTTP GET method
-#json_data = connection.get(completeURL, headers=header, verify=verify_cert)
-#stdout = json.loads(json_data.text)
-#srvFolderList = {}
-#print "Name\t\t\t\t\tinstanceId\t\tParent"
-#for i in range(len(stdout)):
-#        if stdout[i]['name'] == "Servers":
-#                continue
-#        print "%s\t\t\t\t%s\t\t%s" % (stdout[i]['name'], stdout[i]['instanceId'], stdout[i]['parent']['instanceName'])
-#        srvFolderList[stdout[i]['name']] = {}
-#        srvFolderList[stdout[i]['name']]['instanceId'] = stdout[i]['instanceId']
-#        srvFolderList[stdout[i]['name']]['parent'] = stdout[i]['parent']['instanceName']
