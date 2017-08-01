@@ -136,8 +136,8 @@ for i in range(len(stdout)):
 
 # add single FC WWPN to server object
 payload = {}
-payload['HbaPortType'] = 'FibreChannel'
-payload['WwnOrIscsiName'] = '21000024FF27DBCC'
+payload['HbaPortType'] = 'Iscsi'
+payload['WwnOrIscsiName'] = 'iqn.1993-08.org.debian:01:efd938214243'
 REST = '/StorageCenter/ScPhysicalServer/%s/AddHba' % srvList['theodore']['instanceId']
 completeURL = '%s%s' % (baseURL, REST if REST[0] != '/' else REST[1:])
 json_data = connection.post(completeURL, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), headers=header, verify=verify_cert)

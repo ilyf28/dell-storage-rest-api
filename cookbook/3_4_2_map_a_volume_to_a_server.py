@@ -186,7 +186,7 @@ for i in range(len(stdout)):
 
 # map a volume object to a server
 payload = {}
-payload['Server'] = srvList['devStack.local']['instanceId']
+payload['Server'] = srvList['theodore']['instanceId']
 REST = '/StorageCenter/ScVolume/%s/MapToServer' % volList['RestTest_Vol']['instanceId']
 completeURL = '%s%s' % (baseURL, REST if REST[0] != '/' else REST[1:])
 json_data = connection.post(completeURL, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), headers=header, verify=verify_cert)
